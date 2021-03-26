@@ -31,7 +31,7 @@ public class JavaTypeUtils {
         map.put(JDBCType.DATE, Date.class);
         map.put(JDBCType.TIME, Date.class);
         map.put(JDBCType.TIMESTAMP, Date.class);
-        map.put(JDBCType.BIT, boolean.class);
+        map.put(JDBCType.BIT, Boolean.class);
     }
 
     /**

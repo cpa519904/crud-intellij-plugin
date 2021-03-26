@@ -7,7 +7,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 </#list>
 
 /**
- * ${comment}
+ * <dl>
+ *    <dt><b>Title:</b></dt>
+ *    <dd>
+ *    	none
+ *    </dd>
+ *    <dt><b>Description:</b></dt>
+ *    <dd>
+ *    	<p>
+ *    </dd>
+ *
+ * @author ${author}
+ * @date ${datetime}
  */
 <#assign model=dao.model />
 public interface ${simpleName} extends IService<${model.simpleName}> {

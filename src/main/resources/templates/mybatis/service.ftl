@@ -6,7 +6,18 @@ import com.github.pagehelper.PageInfo;
 </#list>
 
 /**
- * ${comment}
+ * <dl>
+ *    <dt><b>Title:</b></dt>
+ *    <dd>
+ *    	none
+ *    </dd>
+ *    <dt><b>Description:</b></dt>
+ *    <dd>
+ *    	<p>
+ *    </dd>
+ *
+ * @author ${author}
+ * @date ${datetime}
  */
 public interface ${simpleName} {
 

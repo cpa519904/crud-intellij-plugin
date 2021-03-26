@@ -1,8 +1,10 @@
 package com.github.mars05.crud.intellij.plugin.util;
 
-import com.github.mars05.crud.intellij.plugin.model.Table;
+import com.github.mars05.crud.intellij.plugin.base.Table;
 import com.github.mars05.crud.intellij.plugin.setting.Conn;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -11,6 +13,8 @@ import java.util.List;
 public class SelectionContext {
     private static String projectType;
     private static int ormType;
+    private static String datetime;
+    private static String author;
     private static Conn conn;
     private static String db;
     private static List<Table> tables;
@@ -19,9 +23,20 @@ public class SelectionContext {
     private static String version;
     private static String pkg;
     private static String modelPackage;
+    private static String mapperPackage;
+    private static String baseMapperPackage;
+    private static String modelExtPackage;
     private static String daoPackage;
+    private static String providerPackage;
+    private static String dalPackage;
+    private static String dtoPackage;
+    private static String voPackage;
+    private static String superDalPackage;
     private static String servicePackage;
+    private static String serviceExtPackage;
     private static String controllerPackage;
+    private static String controllerExtPackage;
+    private static String apiPackage;
     private static String mapperDir;
 
     public static Conn getConn() {
@@ -89,6 +104,94 @@ public class SelectionContext {
         SelectionContext.pkg = pkg;
     }
 
+    public static String getModelExtPackage() {
+        return modelExtPackage;
+    }
+
+    public static void setModelExtPackage(String modelExtPackage) {
+        SelectionContext.modelExtPackage = modelExtPackage;
+    }
+
+    public static String getDalPackage() {
+        return dalPackage;
+    }
+
+    public static void setDalPackage(String dalPackage) {
+        SelectionContext.dalPackage = dalPackage;
+    }
+
+    public static String getServiceExtPackage() {
+        return serviceExtPackage;
+    }
+
+    public static void setServiceExtPackage(String serviceExtPackage) {
+        SelectionContext.serviceExtPackage = serviceExtPackage;
+    }
+
+    public static String getControllerExtPackage() {
+        return controllerExtPackage;
+    }
+
+    public static void setControllerExtPackage(String controllerExtPackage) {
+        SelectionContext.controllerExtPackage = controllerExtPackage;
+    }
+
+    public static String getApiPackage() {
+        return apiPackage;
+    }
+
+    public static void setApiPackage(String apiPackage) {
+        SelectionContext.apiPackage = apiPackage;
+    }
+
+    public static String getMapperPackage() {
+        return mapperPackage;
+    }
+
+    public static void setMapperPackage(String mapperPackage) {
+        SelectionContext.mapperPackage = mapperPackage;
+    }
+
+    public static String getBaseMapperPackage() {
+        return baseMapperPackage;
+    }
+
+    public static void setBaseMapperPackage(String baseMapperPackage) {
+        SelectionContext.baseMapperPackage = baseMapperPackage;
+    }
+
+    public static String getSuperDalPackage() {
+        return superDalPackage;
+    }
+
+    public static void setSuperDalPackage(String superDalPackage) {
+        SelectionContext.superDalPackage = superDalPackage;
+    }
+
+    public static String getAuthor() {
+        return author;
+    }
+
+    public static void setAuthor(String author) {
+        SelectionContext.author = author;
+    }
+
+    public static String getPkg() {
+        return pkg;
+    }
+
+    public static void setPkg(String pkg) {
+        SelectionContext.pkg = pkg;
+    }
+
+    public static String getDatetime() {
+        return datetime;
+    }
+
+    public static void setDatetime(String datetime) {
+        SelectionContext.datetime = datetime;
+    }
+
     public static void clearAllSet() {
         projectType = null;
         conn = null;
@@ -99,10 +202,23 @@ public class SelectionContext {
         version = null;
         pkg = null;
         daoPackage = null;
+        dalPackage = null;
+        providerPackage = null;
+        dtoPackage = null;
+        voPackage = null;
+        superDalPackage = null;
         servicePackage = null;
+        serviceExtPackage = null;
         controllerPackage = null;
+        controllerExtPackage = null;
+        apiPackage = null;
         mapperDir = null;
         modelPackage = null;
+        mapperPackage = null;
+        baseMapperPackage = null;
+        modelExtPackage = null;
+        author = null;
+        datetime = null;
         ormType = 0;
     }
 
@@ -117,11 +233,25 @@ public class SelectionContext {
         selection.setVersion(version);
         selection.setPackage(pkg);
         selection.setDaoPackage(daoPackage);
+        selection.setDalPackage(dalPackage);
+        selection.setDalPackage(providerPackage);
+        selection.setDtoPackage(dtoPackage);
+        selection.setVoPackage(voPackage);
+        selection.setSuperDalPackage(superDalPackage);
         selection.setServicePackage(servicePackage);
+        selection.setServiceExtPackage(serviceExtPackage);
         selection.setControllerPackage(controllerPackage);
+        selection.setControllerExtPackage(controllerExtPackage);
+        selection.setApiPackage(apiPackage);
         selection.setMapperDir(mapperDir);
         selection.setModelPackage(modelPackage);
+        selection.setMapperPackage(mapperPackage);
+        selection.setBaseMapperPackage(baseMapperPackage);
+        selection.setModelExtPackage(modelExtPackage);
         selection.setOrmType(ormType);
+        selection.setAuthor(author);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        selection.setDatetime(LocalDateTime.now().format(formatter));
         return selection;
     }
 
@@ -171,5 +301,29 @@ public class SelectionContext {
 
     public static String getModelPackage() {
         return modelPackage;
+    }
+
+    public static String getDtoPackage() {
+        return dtoPackage;
+    }
+
+    public static void setDtoPackage(String dtoPackage) {
+        SelectionContext.dtoPackage = dtoPackage;
+    }
+
+    public static String getVoPackage() {
+        return voPackage;
+    }
+
+    public static void setVoPackage(String voPackage) {
+        SelectionContext.voPackage = voPackage;
+    }
+
+    public static String getProviderPackage() {
+        return providerPackage;
+    }
+
+    public static void setProviderPackage(String providerPackage) {
+        SelectionContext.providerPackage = providerPackage;
     }
 }

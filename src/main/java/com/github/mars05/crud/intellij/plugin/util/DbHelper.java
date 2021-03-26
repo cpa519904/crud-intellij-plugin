@@ -1,13 +1,12 @@
 package com.github.mars05.crud.intellij.plugin.util;
 
-import com.github.mars05.crud.intellij.plugin.model.Column;
-import com.github.mars05.crud.intellij.plugin.model.Table;
+import com.github.mars05.crud.intellij.plugin.base.Column;
+import com.github.mars05.crud.intellij.plugin.base.Table;
 import com.mysql.jdbc.StringUtils;
 
+import java.awt.image.ImageProducer;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author xiaoyu
@@ -129,11 +128,31 @@ public class DbHelper {
             while (primaryKeys.next()) {
                 primaryKey = primaryKeys.getString("COLUMN_NAME");
             }
+
+            StringBuilder queryBuf = new StringBuilder("select * FROM ");
+            queryBuf.append(tableName);
+            queryBuf.append(" WHERE 1 = 2 ");
+            PreparedStatement preparedStatement=null;
+            Map<String,String> map = new HashMap<>();
+            try {
+                preparedStatement= conn.prepareStatement(queryBuf.toString());
+                ResultSet resultSet = preparedStatement.executeQuery();
+                ResultSetMetaData metaDataItem = resultSet.getMetaData();
+                for (int i = 1; i <= metaDataItem.getColumnCount(); i++) {
+                    map.put(metaDataItem.getColumnName(i ),String.format("%s(%s)",metaDataItem.getColumnTypeName(i ).toLowerCase(),metaDataItem.getColumnDisplaySize(i)));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
+
+
+
             ResultSet rs = metaData.getColumns(null, null, tableName, null);
             List<Column> ls = new ArrayList<>();
             while (rs.next()) {
+
                 String columnName = rs.getString("COLUMN_NAME");
-                Column column = new Column(rs.getString("REMARKS"), columnName, rs.getInt("DATA_TYPE"));
+                Column column = new Column(rs.getString("REMARKS"), columnName, rs.getInt("DATA_TYPE"),map.get(columnName));
                 if (!StringUtils.isNullOrEmpty(primaryKey) && columnName.equals(primaryKey)) {
                     column.setId(true);
                 }
@@ -144,4 +163,40 @@ public class DbHelper {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
+    public static void main(String[] args) {
+//        String host="192.168.19.81";
+//        Integer port=3306;
+//        String username="root";
+//        String password="yry112233";
+//        DbHelper dbHelper = new DbHelper(host, port, username, password);
+//        dbHelper.db="yskj_system";
+//        Connection connection = dbHelper.getConnection("yskj_system");
+//        List<Column> t_tc_company = dbHelper.getAllColumn("t_tc_company", connection);
+//        System.out.println(new Gson().toJson(t_tc_company));
+
+//        try{
+//
+//            PreparedStatement preparedStatement = connection.prepareStatement("select * from t_tc_company where 1 = 2");
+//            ResultSetMetaData resultSetMetaData = preparedStatement.executeQuery().getMetaData();
+//
+//            for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
+//
+//                System.out.println("数据库实例名:"+resultSetMetaData.getCatalogName(i ));
+//                System.out.println("表名:"+resultSetMetaData.getTableName(i ));
+//                System.out.println("java类型:"+resultSetMetaData.getColumnClassName(i ));
+//                System.out.println("数据库类型:"+resultSetMetaData.getColumnTypeName(i ).toLowerCase());
+//                System.out.println("字段名称:"+resultSetMetaData.getColumnName(i ));
+//                System.out.println("字段长度:"+resultSetMetaData.getColumnDisplaySize(i ));
+//                System.out.println("getColumnType:"+resultSetMetaData.getColumnType(i ));
+//                System.out.println("getPrecision:"+resultSetMetaData.getPrecision(i ));
+//                System.out.println("getScale:"+resultSetMetaData.getScale(i ));
+//                System.out.println("getSchemaName:"+resultSetMetaData.getSchemaName(i ));
+//                System.out.println("getScale:"+resultSetMetaData.getScale(i ));
+//            }
+//        } catch (Exception e) {
+//           e.printStackTrace();
+//        }
+
+    }
+
 }

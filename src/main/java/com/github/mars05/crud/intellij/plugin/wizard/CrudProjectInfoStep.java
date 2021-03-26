@@ -7,6 +7,8 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.util.text.StringUtil;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author xiaoyu
@@ -18,6 +20,7 @@ public class CrudProjectInfoStep extends ModuleWizardStep {
 	private JTextField myVersionField;
 	private JTextField myPackageField;
 	private JComboBox myFrameComboBox;
+	private JTextField myAuthorField;
 
 	@Override
 	public JComponent getComponent() {
@@ -49,6 +52,9 @@ public class CrudProjectInfoStep extends ModuleWizardStep {
 		SelectionContext.setVersion(myVersionField.getText());
 		SelectionContext.setPackage(myPackageField.getText());
 		SelectionContext.setOrmType(myFrameComboBox.getSelectedIndex());
+		SelectionContext.setAuthor(myAuthorField.getText());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		SelectionContext.setDatetime(LocalDateTime.now().format(formatter));
 		return super.validate();
 	}
 

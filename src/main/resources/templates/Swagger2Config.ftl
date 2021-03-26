@@ -9,8 +9,20 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+
 /**
- * Swagger配置
+ * <dl>
+ *    <dt><b>Title:</b></dt>
+ *    <dd>
+ *    	none
+ *    </dd>
+ *    <dt><b>Description:</b></dt>
+ *    <dd>
+ *    	<p> Swagger配置
+ *    </dd>
+ *
+ * @author ${author}
+ * @date ${datetime}
  */
 @Configuration
 @EnableSwagger2

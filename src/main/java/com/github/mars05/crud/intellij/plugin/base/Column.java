@@ -1,4 +1,4 @@
-package com.github.mars05.crud.intellij.plugin.model;
+package com.github.mars05.crud.intellij.plugin.base;
 
 /**
  * @author xiaoyu
@@ -6,6 +6,7 @@ package com.github.mars05.crud.intellij.plugin.model;
 public class Column {
     private String comment;
     private String name;
+    private String typeName;
     private int type;
     private boolean id;
 
@@ -18,6 +19,19 @@ public class Column {
         this.comment = comment;
         this.name = name;
         this.type = type;
+    }
+
+
+    /**
+     * @param comment 列注释
+     * @param name    列名
+     * @param type    列类型
+     */
+    public Column(String comment, String name, int type,String typeName) {
+        this.comment = comment;
+        this.name = name;
+        this.type = type;
+        this.typeName = typeName;
     }
 
     public String getName() {
@@ -38,5 +52,9 @@ public class Column {
 
     public void setId(boolean id) {
         this.id = id;
+    }
+
+    public String getTypeName() {
+        return typeName;
     }
 }

@@ -25,18 +25,30 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
     private JPanel myMainPanel;
     private JComboBox myFrameComboBox;
     private JCheckBox myControllerCheckBox;
+    private JCheckBox myController30CheckBox;
     private JTextField myControllerField;
+    private JTextField myController30Field;
     private JCheckBox myServiceCheckBox;
+    private JCheckBox myService30CheckBox;
     private JTextField myServiceField;
+    private JTextField myService30Field;
     private JCheckBox myDaoCheckBox;
+    private JCheckBox myDalCheckBox;
     private JTextField myDaoField;
+    private JTextField myDalField;
     private JPanel myMapperField;
     private JButton myControllerChoose;
+    private JButton myController30Choose;
     private JButton myServiceChoose;
+    private JButton myService30Choose;
     private JButton myDaoChoose;
+    private JButton myDalChoose;
     private JCheckBox myModelCheckBox;
+    private JCheckBox myModel30CheckBox;
     private JTextField myModelField;
+    private JTextField myModel30Field;
     private JButton myModelChoose;
+    private JButton myModel30Choose;
     private JPanel myPackagePanel;
     private JLabel myMapperLabel;
 
@@ -47,15 +59,23 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
         myProject = project;
         myModule = module;
         myControllerField.setText(SelectionContext.getControllerPackage());
+        myController30Field.setText(SelectionContext.getControllerExtPackage());
         myServiceField.setText(SelectionContext.getServicePackage());
+        myService30Field.setText(SelectionContext.getServiceExtPackage());
         myDaoField.setText(SelectionContext.getDaoPackage());
+        myDalField.setText(SelectionContext.getDalPackage());
         myModelField.setText(SelectionContext.getModelPackage());
+        myModel30Field.setText(SelectionContext.getModelExtPackage());
         ((TextFieldWithBrowseButton) myMapperField).setText(SelectionContext.getMapperDir());
 
         myControllerCheckBox.addChangeListener(e -> checkBoxSetup(myControllerCheckBox.isSelected()));
+        myController30CheckBox.addChangeListener(e -> checkBoxSetup(myController30CheckBox.isSelected()));
+        myService30CheckBox.addChangeListener(e -> checkBoxSetup(myService30CheckBox.isSelected()));
         myServiceCheckBox.addChangeListener(e -> checkBoxSetup(myServiceCheckBox.isSelected()));
         myDaoCheckBox.addChangeListener(e -> checkBoxSetup(myDaoCheckBox.isSelected()));
+        myDalCheckBox.addChangeListener(e -> checkBoxSetup(myDalCheckBox.isSelected()));
         myModelCheckBox.addChangeListener(e -> checkBoxSetup(myModelCheckBox.isSelected()));
+        myModel30CheckBox.addChangeListener(e -> checkBoxSetup(myModel30CheckBox.isSelected()));
 
         myFrameComboBox.addItemListener(e -> switchFrame());
 
@@ -70,6 +90,18 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
                 }
             }
         });
+
+        myController30Choose.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PackageChooserDialog dialog = new PackageChooserDialog("Controller30 Package Choose", project);
+                dialog.selectPackage(myController30Field.getText());
+                if (dialog.showAndGet()) {
+                    PsiPackage selectedPackage = dialog.getSelectedPackage();
+                    myController30Field.setText(selectedPackage.getQualifiedName());
+                }
+            }
+        });
         myServiceChoose.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,6 +110,17 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
                 if (dialog.showAndGet()) {
                     PsiPackage selectedPackage = dialog.getSelectedPackage();
                     myServiceField.setText(selectedPackage.getQualifiedName());
+                }
+            }
+        });
+        myService30Choose.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PackageChooserDialog dialog = new PackageChooserDialog("Service30 Package Choose", project);
+                dialog.selectPackage(myService30Field.getText());
+                if (dialog.showAndGet()) {
+                    PsiPackage selectedPackage = dialog.getSelectedPackage();
+                    myService30Field.setText(selectedPackage.getQualifiedName());
                 }
             }
         });
@@ -92,6 +135,17 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
                 }
             }
         });
+        myDalChoose.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PackageChooserDialog dialog = new PackageChooserDialog("Dal Package Choose", project);
+                dialog.selectPackage(myDalField.getText());
+                if (dialog.showAndGet()) {
+                    PsiPackage selectedPackage = dialog.getSelectedPackage();
+                    myDalField.setText(selectedPackage.getQualifiedName());
+                }
+            }
+        });
         myModelChoose.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,6 +154,17 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
                 if (dialog.showAndGet()) {
                     PsiPackage selectedPackage = dialog.getSelectedPackage();
                     myModelField.setText(selectedPackage.getQualifiedName());
+                }
+            }
+        });
+        myModel30Choose.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PackageChooserDialog dialog = new PackageChooserDialog("Model30 Package Choose", project);
+                dialog.selectPackage(myModel30Field.getText());
+                if (dialog.showAndGet()) {
+                    PsiPackage selectedPackage = dialog.getSelectedPackage();
+                    myModel30Field.setText(selectedPackage.getQualifiedName());
                 }
             }
         });
@@ -113,9 +178,16 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
 
     @Override
     public boolean validate() throws ConfigurationException {
-        if (!myModelCheckBox.isSelected() && !myDaoCheckBox.isSelected() && !myServiceCheckBox.isSelected() && !myControllerCheckBox.isSelected()) {
-            throw new ConfigurationException("未选择需要生成的文件");
+        if(OrmType.MYBATIS_EXT ==myFrameComboBox.getSelectedIndex()){
+            if (!myModel30CheckBox.isSelected() && !myDalCheckBox.isSelected() && !myService30CheckBox.isSelected() && !myController30CheckBox.isSelected()) {
+                throw new ConfigurationException("未选择需要生成的文件");
+            }
+        }else{
+            if (!myModelCheckBox.isSelected() && !myDaoCheckBox.isSelected() && !myServiceCheckBox.isSelected() && !myControllerCheckBox.isSelected()) {
+                throw new ConfigurationException("未选择需要生成的文件");
+            }
         }
+
         JavaPsiFacade facade = JavaPsiFacade.getInstance(myProject);
         if (OrmType.MYBATIS == myFrameComboBox.getSelectedIndex()) {
             try {
@@ -143,9 +215,37 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
                 throw new ConfigurationException(e.getMessage(), "缺少依赖");
             }
             SelectionContext.setOrmType(OrmType.JPA);
+        }else if(OrmType.MYBATIS_EXT == myFrameComboBox.getSelectedIndex()){
+            try {
+                Preconditions.checkNotNull(facade.findClass("org.apache.ibatis.session.SqlSession", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
+                        "org.apache.ibatis.session.SqlSession 未找到");
+                Preconditions.checkNotNull(facade.findClass("org.mybatis.spring.SqlSessionFactoryBean", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
+                        "org.mybatis.spring.SqlSessionFactoryBean 未找到");
+                if (myDaoCheckBox.isSelected()) {
+                    Preconditions.checkNotNull(facade.findClass("com.github.pagehelper.Page", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
+                            "com.github.pagehelper.Page 未找到");
+                }
+            } catch (Exception e) {
+                throw new ConfigurationException(e.getMessage(), "缺少依赖");
+            }
+            SelectionContext.setOrmType(OrmType.MYBATIS_EXT);
+        }else if(OrmType.MYBATIS_SAAS == myFrameComboBox.getSelectedIndex()){
+            try {
+                Preconditions.checkNotNull(facade.findClass("org.apache.ibatis.session.SqlSession", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
+                        "org.apache.ibatis.session.SqlSession 未找到");
+                Preconditions.checkNotNull(facade.findClass("org.mybatis.spring.SqlSessionFactoryBean", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
+                        "org.mybatis.spring.SqlSessionFactoryBean 未找到");
+                if (myDaoCheckBox.isSelected()) {
+                    Preconditions.checkNotNull(facade.findClass("com.github.pagehelper.Page", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
+                            "com.github.pagehelper.Page 未找到");
+                }
+            } catch (Exception e) {
+                throw new ConfigurationException(e.getMessage(), "缺少依赖");
+            }
+            SelectionContext.setOrmType(OrmType.MYBATIS_SAAS);
         } else {
             try {
-                Preconditions.checkNotNull(facade.findClass("com.baomidou.mybatisplus.annotation.TableName", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
+                Preconditions.checkNotNull(facade.findClass("com.baomidou.mybatissaas.annotation.TableName", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
                         "com.baomidou.mybatisplus.annotation.TableName 未找到");
                 Preconditions.checkNotNull(facade.findClass("org.apache.ibatis.session.SqlSession", GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule)),
                         "org.apache.ibatis.session.SqlSession 未找到");
@@ -167,11 +267,21 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
         SelectionContext.setDaoPackage(null);
         SelectionContext.setMapperDir(null);
         SelectionContext.setModelPackage(null);
+        SelectionContext.setControllerExtPackage(null);
+        SelectionContext.setServiceExtPackage(null);
+        SelectionContext.setDalPackage(null);
+        SelectionContext.setModelExtPackage(null);
         if (myControllerCheckBox.isSelected()) {
             SelectionContext.setControllerPackage(myControllerField.getText());
         }
+        if (myController30CheckBox.isSelected()) {
+            SelectionContext.setControllerPackage(myController30Field.getText());
+        }
         if (myServiceCheckBox.isSelected()) {
             SelectionContext.setServicePackage(myServiceField.getText());
+        }
+        if (myService30CheckBox.isSelected()) {
+            SelectionContext.setServicePackage(myService30Field.getText());
         }
         if (myDaoCheckBox.isSelected()) {
             SelectionContext.setDaoPackage(myDaoField.getText());
@@ -179,8 +289,17 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
                 SelectionContext.setMapperDir(((TextFieldWithBrowseButton) myMapperField).getText());
             }
         }
+        if (myDalCheckBox.isSelected()) {
+            SelectionContext.setDaoPackage(myDalField.getText());
+            if (0 == myFrameComboBox.getSelectedIndex()) {
+                SelectionContext.setMapperDir(((TextFieldWithBrowseButton) myMapperField).getText());
+            }
+        }
         if (myModelCheckBox.isSelected()) {
             SelectionContext.setModelPackage(myModelField.getText());
+        }
+        if (myModel30CheckBox.isSelected()) {
+            SelectionContext.setModelPackage(myModel30Field.getText());
         }
         return super.validate();
     }
@@ -207,6 +326,15 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
                 myDaoCheckBox.setSelected(true);
             } else if (myDaoCheckBox.isSelected()) {
                 myModelCheckBox.setSelected(true);
+            }else if (myController30CheckBox.isSelected()) {
+                myModel30CheckBox.setSelected(true);
+                myDalCheckBox.setSelected(true);
+                myService30CheckBox.setSelected(true);
+            } else if (myService30CheckBox.isSelected()) {
+                myModel30CheckBox.setSelected(true);
+                myDalCheckBox.setSelected(true);
+            } else if (myDalCheckBox.isSelected()) {
+                myModel30CheckBox.setSelected(true);
             }
         } else {
             if (!myModelCheckBox.isSelected()) {
@@ -219,6 +347,16 @@ public class CrudDirSelectInfoStep extends ModuleWizardStep {
                 myControllerCheckBox.setSelected(false);
             } else if (!myServiceCheckBox.isSelected()) {
                 myControllerCheckBox.setSelected(false);
+            }else if (!myModel30CheckBox.isSelected()) {
+                //处理没选中
+                myDalCheckBox.setSelected(false);
+                myService30CheckBox.setSelected(false);
+                myController30CheckBox.setSelected(false);
+            } else if (!myDalCheckBox.isSelected()) {
+                myService30CheckBox.setSelected(false);
+                myController30CheckBox.setSelected(false);
+            } else if (!myService30CheckBox.isSelected()) {
+                myController30CheckBox.setSelected(false);
             }
         }
 

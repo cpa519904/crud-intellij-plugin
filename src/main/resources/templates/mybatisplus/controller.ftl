@@ -22,7 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 <#list model.fields as field>
     <#if field.id>
 /**
- * ${comment}
+ * <dl>
+ *    <dt><b>Title:</b></dt>
+ *    <dd>
+ *    	none
+ *    </dd>
+ *    <dt><b>Description:</b></dt>
+ *    <dd>
+ *    	<p>
+ *    </dd>
+ *
+ * @author ${author}
+ * @date ${datetime}
  */
 @RestController
 @RequestMapping("/${model.varName+'s'}")

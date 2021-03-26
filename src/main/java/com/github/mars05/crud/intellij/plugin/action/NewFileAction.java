@@ -1,9 +1,6 @@
 package com.github.mars05.crud.intellij.plugin.action;
 
-import com.github.mars05.crud.intellij.plugin.util.CrudUtils;
-import com.github.mars05.crud.intellij.plugin.util.PsiFileUtils;
-import com.github.mars05.crud.intellij.plugin.util.Selection;
-import com.github.mars05.crud.intellij.plugin.util.SelectionContext;
+import com.github.mars05.crud.intellij.plugin.util.*;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
@@ -44,9 +41,19 @@ public class NewFileAction extends AnAction {
 			basePackage += ".";
 		}
 		SelectionContext.setControllerPackage(basePackage + "controller");
+		SelectionContext.setControllerExtPackage(basePackage + "controller");
+		SelectionContext.setApiPackage(basePackage + "api");
 		SelectionContext.setServicePackage(basePackage + "service");
+		SelectionContext.setServiceExtPackage(basePackage + "service");
 		SelectionContext.setDaoPackage(basePackage + "dao");
+		SelectionContext.setDtoPackage(basePackage + "dto");
+		SelectionContext.setProviderPackage(basePackage + "provider");
+		SelectionContext.setVoPackage(basePackage + "vo");
+		SelectionContext.setDalPackage(basePackage + "dal");
 		SelectionContext.setModelPackage(basePackage + "model");
+		SelectionContext.setModelExtPackage(basePackage + "model");
+		SelectionContext.setSuperDalPackage(basePackage + "dal");
+		SelectionContext.setBaseMapperPackage(basePackage + "mapper");
 		SelectionContext.setMapperDir(moduleRootPath + "/src/main/resources/mapper");
 
 		CrudActionDialog dialog = new CrudActionDialog(project, module);
@@ -59,7 +66,16 @@ public class NewFileAction extends AnAction {
 				Selection selection = SelectionContext.copyToSelection();
 				SelectionContext.clearAllSet();
 				try {
-					PsiFileUtils.createCrud(project, selection, moduleRootPath);
+					int ormType = selection.getOrmType();
+					if(ormType==3){
+						PsiFile30Utils.createCrud(project, selection, moduleRootPath);
+
+					}else if (ormType==4){
+						PsiFileSaasUtils.createCrud(project, selection, moduleRootPath);
+					}else{
+						PsiFileUtils.createCrud(project, selection, moduleRootPath);
+					}
+
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

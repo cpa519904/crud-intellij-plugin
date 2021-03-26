@@ -11,6 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 </#list>
 
 <#assign model=dao.model />
+/**
+ * <dl>
+ *    <dt><b>Title:</b></dt>
+ *    <dd>
+ *    	none
+ *    </dd>
+ *    <dt><b>Description:</b></dt>
+ *    <dd>
+ *    	<p>
+ *    </dd>
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ${simpleName}Impl extends ServiceImpl<${dao.simpleName}, ${model.simpleName}> implements ${simpleName}{

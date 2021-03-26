@@ -31,6 +31,8 @@ import org.jetbrains.idea.maven.project.MavenProjectsManager;
 
 import javax.swing.*;
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author xiaoyu
@@ -95,24 +97,66 @@ public class SpringBootModuleBuilder extends ModuleBuilder {
 
 	private void initProject(Project project, Selection selection) throws Exception {
 		initMavenStructure();
-		//pom.xml生成
-		PsiFileUtils.createPOMXML(project, createAndGetContentEntry(), selection);
-		//swagger生成
-		PsiFileUtils.createSwagger(project, createPackageDir(selection.getPackage() + ".config"), selection);
-		//Application类生成
-		PsiFileUtils.createApplicationJava(project, createPackageDir(selection.getPackage()), selection);
-		//application.yml配置生成
-		PsiFileUtils.createApplicationYml(project, createResourceDir("/"), selection);
 
-		selection.setModelPackage(selection.getPackage() + ".model");
-		selection.setDaoPackage(selection.getPackage() + ".dao");
-		if (selection.getOrmType() == OrmType.MYBATIS) {
-			selection.setMapperDir(getContentEntryPath() + "/src/main/resources/mapper");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		selection.setDatetime(LocalDateTime.now().format(formatter));
+		if(selection.getOrmType()==OrmType.MYBATIS_EXT){
+			//pom.xml生成
+			PsiFile30Utils.createPOMXML(project, createAndGetContentEntry(), selection);
+			//swagger生成
+			PsiFile30Utils.createSwagger(project, createPackageDir(selection.getPackage() + ".config"), selection);
+			//Application类生成
+			PsiFile30Utils.createApplicationJava(project, createPackageDir(selection.getPackage()), selection);
+			//application.yml配置生成
+			PsiFile30Utils.createApplicationYml(project, createResourceDir("/"), selection);
+
+			selection.setModelExtPackage(selection.getPackage() + ".model.main");
+			selection.setMapperPackage(selection.getPackage() + ".mapper.main");
+			selection.setSuperDalPackage(selection.getPackage() + ".dal");
+			selection.setBaseMapperPackage(selection.getPackage() + ".mapper");
+			selection.setDalPackage(selection.getPackage() + ".dal.main");
+			selection.setMapperDir(getContentEntryPath() + "/src/main/resources/mapper.main");
+			selection.setServiceExtPackage(selection.getPackage() + ".service");
+			selection.setControllerExtPackage(selection.getPackage() + ".controller");
+			PsiFile30Utils.createCrud(project, selection, getContentEntryPath());
+		}else if(selection.getOrmType()==OrmType.MYBATIS_SAAS){
+			//pom.xml生成
+			PsiFileSaasUtils.createPOMXML(project, createAndGetContentEntry(), selection);
+			//swagger生成
+			PsiFileSaasUtils.createSwagger(project, createPackageDir(selection.getPackage() + ".config"), selection);
+			//Application类生成
+			PsiFileSaasUtils.createApplicationJava(project, createPackageDir(selection.getPackage()), selection);
+			//application.yml配置生成
+			PsiFileSaasUtils.createApplicationYml(project, createResourceDir("/"), selection);
+
+			selection.setModelExtPackage(selection.getPackage() + ".model");
+			selection.setMapperPackage(selection.getPackage() + ".mapper");
+			selection.setDtoPackage(selection.getPackage() + ".dto");
+			selection.setProviderPackage(selection.getPackage() + ".provider");
+			selection.setVoPackage(selection.getPackage() + ".vo");
+			selection.setServiceExtPackage(selection.getPackage() + ".service");
+			selection.setControllerExtPackage(selection.getPackage() + ".api");
+			selection.setApiPackage(selection.getPackage() + ".api");
+			PsiFileSaasUtils.createCrud(project, selection, getContentEntryPath());
+		}else{
+			//pom.xml生成
+			PsiFileUtils.createPOMXML(project, createAndGetContentEntry(), selection);
+			//swagger生成
+			PsiFileUtils.createSwagger(project, createPackageDir(selection.getPackage() + ".config"), selection);
+			//Application类生成
+			PsiFileUtils.createApplicationJava(project, createPackageDir(selection.getPackage()), selection);
+			//application.yml配置生成
+			PsiFileUtils.createApplicationYml(project, createResourceDir("/"), selection);
+			selection.setModelPackage(selection.getPackage() + ".model");
+			selection.setDaoPackage(selection.getPackage() + ".dao");
+			if (selection.getOrmType() == OrmType.MYBATIS) {
+				selection.setMapperDir(getContentEntryPath() + "/src/main/resources/mapper");
+			}
+			selection.setServicePackage(selection.getPackage() + ".service");
+			selection.setControllerPackage(selection.getPackage() + ".controller");
+			PsiFileUtils.createCrud(project, selection, getContentEntryPath());
 		}
-		selection.setServicePackage(selection.getPackage() + ".service");
-		selection.setControllerPackage(selection.getPackage() + ".controller");
 
-		PsiFileUtils.createCrud(project, selection, getContentEntryPath());
 		//解决依赖
 		try {
 			MavenProjectsManager.getInstance(project).forceUpdateAllProjectsOrFindAllAvailablePomFiles();

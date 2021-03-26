@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.github.mars05.crud-plugin</id>
+    <id>com.github.mars05.crud</id>
     <name>Crud</name>
     <vendor url="https://github.com/mars05/crud-intellij-plugin" email="xiaoyucoder@163.com">mars05</vendor>
     <category>Code Tools</category>
@@ -32,7 +32,7 @@
 
     <depends optional="true" config-file="maven-support.xml">org.jetbrains.idea.maven</depends>
 
-    <idea-version since-build="173.0"/>
+    <idea-version since-build="174.0"/>
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <projectTemplatesFactory implementation="com.github.mars05.crud.intellij.plugin.wizard.CrudTemplateFactory"/>

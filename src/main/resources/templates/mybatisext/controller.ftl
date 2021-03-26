@@ -1,0 +1,76 @@
+package ${package};
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import javax.annotation.Resource;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import com.github.pagehelper.PageInfo;
+<#list imports as import>
+    import ${import};
+</#list>
+/**
+ * <dl>
+ *    <dt><b>Title:</b></dt>
+ *    <dd>
+ *    	none
+ *    </dd>
+ *    <dt><b>Description:</b></dt>
+ *    <dd>
+ *    	<p>
+ *    </dd>
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+<#assign model=service.dal.model />
+<#list model.fields as field>
+    <#if field.id>
+@RestController
+@RequestMapping("/${model.varName+'s'}")
+@Api(tags = "${model.comment}")
+public class ${simpleName} {
+    @Resource
+    private ${service.simpleName} ${service.varName};
+
+    @GetMapping("/{id}")
+    @ApiOperation("通过ID查询单个${model.comment}")
+    public ${model.simpleName} findById(@ApiParam("ID") @PathVariable("id") ${field.typeSimpleName} id) {
+        return ${service.varName}.get${model.simpleName}ByPrimaryKey(id);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("分页查询${model.comment}")
+    public PageInfo<${model.simpleName}> findByPage(@ApiParam("页号") @RequestParam(defaultValue = "1") Integer pageNum,
+                                                @ApiParam("每页大小") @RequestParam(defaultValue = "10") Integer pageSize) {
+        return ${service.varName}.get${model.simpleName}PageList(pageNum, pageSize);
+    }
+
+    @PostMapping("/insert")
+    @ApiOperation("新增${model.comment}")
+    public void insert(@RequestBody ${model.simpleName} ${model.varName}) {
+        ${service.varName}.add${model.simpleName}(${model.varName});
+    }
+
+    @PutMapping("/update")
+    @ApiOperation("修改${model.comment}")
+    public void update(@RequestBody ${model.simpleName} ${model.varName}) {
+        ${service.varName}.update${model.simpleName}(${model.varName});
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiOperation("通过ID删除单个${model.comment}")
+    public void deleteById(@ApiParam("ID") @PathVariable("id") ${field.typeSimpleName} id) {
+        ${service.varName}.delete${model.simpleName}ByPrimaryKey(id);
+    }
+}
+    </#if>
+</#list>

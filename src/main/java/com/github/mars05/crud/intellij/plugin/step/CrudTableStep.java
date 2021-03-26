@@ -1,7 +1,7 @@
 package com.github.mars05.crud.intellij.plugin.step;
 
-import com.github.mars05.crud.intellij.plugin.model.Column;
-import com.github.mars05.crud.intellij.plugin.model.Table;
+import com.github.mars05.crud.intellij.plugin.base.Column;
+import com.github.mars05.crud.intellij.plugin.base.Table;
 import com.github.mars05.crud.intellij.plugin.ui.CrudList;
 import com.github.mars05.crud.intellij.plugin.ui.CrudTableView;
 import com.github.mars05.crud.intellij.plugin.ui.ListElement;
@@ -11,7 +11,6 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.options.ConfigurationException;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
@@ -89,7 +88,7 @@ public class CrudTableStep extends ModuleWizardStep {
                     }
                 }
                 if (!hasId) {
-                    throw new Exception("表: " + table.getName() + " 没有主键");
+                    throw new Exception("表: " + table.getTableName() + " 没有主键");
                 }
             }
             SelectionContext.setTables(tables);

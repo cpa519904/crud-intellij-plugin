@@ -1,5 +1,9 @@
 package com.github.mars05.crud.intellij.plugin.util;
 
+import com.github.mars05.crud.intellij.plugin.base.Column;
+import com.github.mars05.crud.intellij.plugin.base.Field;
+import com.github.mars05.crud.intellij.plugin.base.Model;
+import com.github.mars05.crud.intellij.plugin.base.Table;
 import com.github.mars05.crud.intellij.plugin.model.*;
 import com.google.common.base.CaseFormat;
 import com.intellij.openapi.project.Project;
@@ -206,7 +210,7 @@ public class PsiFileUtils {
             List<Column> columns = table.getColumns();
             List<Field> fields = new ArrayList<>();
             for (Column column : columns) {
-                Field field = new Field(column.getComment(), JavaTypeUtils.convertType(column.getType()), column.getName());
+                Field field = new Field(column.getComment(), JavaTypeUtils.convertType(column.getType()), column.getName(),column.getTypeName());
                 field.setId(column.isId());
                 fields.add(field);
             }
@@ -218,7 +222,9 @@ public class PsiFileUtils {
             if (!StringUtils.isBlank(modelPackage)) {
                 modelPackage += ".";
             }
-            Model model = new Model(table.getComment(), modelPackage + CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, table.getName()), table.getName(), fields);
+            Model model = new Model(table.getComment(), modelPackage + CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, table.getName())+"Model", table.getName(), fields);
+            model.setAuthor(selection.getAuthor());
+            model.setDatetime(selection.getDatetime());
             model.setOrmType(selection.getOrmType());
             PsiFileUtils.createModel(project, modelPackageDir, model);
             //dao生成
@@ -231,6 +237,8 @@ public class PsiFileUtils {
                 daoPackage += ".";
             }
             Dao dao = new Dao(table.getComment(), daoPackage + CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, table.getName()) + "DAO", model);
+            dao.setAuthor(selection.getAuthor());
+            dao.setDatetime(selection.getDatetime());
             PsiFileUtils.createDao(project, daoPackageDir, dao);
             //mybatis生成mapper.xml
             if (selection.getOrmType() == OrmType.MYBATIS) {
@@ -253,6 +261,8 @@ public class PsiFileUtils {
                 servicePackage += ".";
             }
             Service service = new Service(table.getComment(), servicePackage + CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, table.getName()) + "Service", dao);
+            service.setAuthor(selection.getAuthor());
+            service.setDatetime(selection.getDatetime());
             PsiFileUtils.createService(project, servicePackageDir, service);
             //实现
             String serviceImplPackage = servicePackage + "impl";
@@ -270,6 +280,8 @@ public class PsiFileUtils {
                 controllerPackage += ".";
             }
             Controller controller = new Controller(table.getComment(), controllerPackage + CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, table.getName()) + "Controller", service);
+            controller.setAuthor(selection.getAuthor());
+            controller.setDatetime(selection.getDatetime());
             PsiFileUtils.createController(project, controllerPackageDir, controller);
         }
     }

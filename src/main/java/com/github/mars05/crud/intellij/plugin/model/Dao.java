@@ -1,5 +1,9 @@
 package com.github.mars05.crud.intellij.plugin.model;
 
+import com.github.mars05.crud.intellij.plugin.base.Base;
+import com.github.mars05.crud.intellij.plugin.base.Field;
+import com.github.mars05.crud.intellij.plugin.base.Model;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

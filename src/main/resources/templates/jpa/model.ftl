@@ -10,7 +10,18 @@ import javax.persistence.Table;
 </#list>
 
 /**
- * ${comment}
+ * <dl>
+ *    <dt><b>Title:</b></dt>
+ *    <dd>
+ *    	none
+ *    </dd>
+ *    <dt><b>Description:</b></dt>
+ *    <dd>
+ *    	<p>
+ *    </dd>
+ *
+ * @author ${author}
+ * @date ${datetime}
  */
 @Data
 @Entity
